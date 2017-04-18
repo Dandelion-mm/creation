@@ -18,8 +18,9 @@ typedef struct{
   int w;
 } Point;
 
-int getDistance(double x, double y, double x2, double y2) {
-  double distance = sqrt((x2 - x) * (x2 - x) + (y2 - y) * (y2 - y));
+/** ２点間の距離を求める関数 */
+double getDistance(double px, double py, double qx, double qy) {
+  double distance = sqrt((qx - px) * (qx - px) + (qy - py) * (qy - py));
   return distance;
 }
 
@@ -28,7 +29,7 @@ int main(void){
   /** n個の整数の数を決める */
   int n = 0;
 
-  printf("整数の個数を入力してください。\n");
+  printf("整数の個数を入力してください\n");
   scanf("%d",&n);
 
   /** 乱数を発生させ、座標上の位置を決める */
@@ -41,12 +42,7 @@ int main(void){
     p[i].x = (double)rand() / RAND_MAX;
     p[i].y = (double)rand() / RAND_MAX;
     p[i].w = 0;
-    printf("(x,y)=(%f,%f)\n", p[i].x, p[i].y);
   }
-
-  /** A,Bを設定する  */
-  printf("A = (%f,%f) とする\n", p[0].x, p[0].y);
-  printf("B = (%f,%f) とする\n", p[n-1].x, p[n-1].y);
 
   /** rの距離の設定 */
   double r = 0;
@@ -58,20 +54,19 @@ int main(void){
       printf("適切な値を入力してください\n");
     }
   }while (r <= 0 || 1 <= r);
+  
+  /** A,Bを設定する  */
+  printf("A、B共に乱数で生成します\n");
+  printf("A = (%f,%f) とします\n", p[0].x, p[0].y);
+  printf("B = (%f,%f) とします\n", p[n-1].x, p[n-1].y);
 
   /** Aからの距離をそれぞれ求める */
   double tmp = 0;
     
   for(i=1; i<n; i++){
-    printf("(%f, %f, %f, %f\n)",p[0].x, p[0].y, p[i].x, p[i].y);
     tmp = getDistance(p[0].x, p[0].y, p[i].x, p[i].y);
-    printf("%f",tmp);
       if(tmp <= r){
 	p[i].w = 1;
       }
-    printf("(%d)\n", p[i].w);
   }
-  
-  
-  
 }
