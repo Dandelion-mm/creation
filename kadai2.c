@@ -45,8 +45,8 @@ int main(void){
   }
 
   /** A,Bを設定する  */
-  printf("A = (%f,%f) とする\n",p[0].x,p[0].y);
-  printf("B = (%f,%f) とする\n",p[n-1].x,p[n-1].y);
+  printf("A = (%f,%f) とする\n", p[0].x, p[0].y);
+  printf("B = (%f,%f) とする\n", p[n-1].x, p[n-1].y);
 
   /** rの距離の設定 */
   double r = 0;
@@ -58,10 +58,20 @@ int main(void){
       printf("適切な値を入力してください\n");
     }
   }while (r <= 0 || 1 <= r);
-  printf("%f\n", r);
 
   /** Aからの距離をそれぞれ求める */
-
+  double tmp = 0;
+    
+  for(i=1; i<n; i++){
+    printf("(%f, %f, %f, %f\n)",p[0].x, p[0].y, p[i].x, p[i].y);
+    tmp = getDistance(p[0].x, p[0].y, p[i].x, p[i].y);
+    printf("%f",tmp);
+      if(tmp <= r){
+	p[i].w = 1;
+      }
+    printf("(%d)\n", p[i].w);
+  }
+  
   
   
 }
