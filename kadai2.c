@@ -38,17 +38,17 @@ double getDistance(double px, double py, double qx, double qy) {
  * Mainの実行
  */
 int main(void){
-
+  
   /** 整数の数nを決める */
   int n = 0;
-
+  
   printf("整数の個数を入力してください\n");
   scanf("%d",&n);
-
+  
   /** 乱数を発生させ、座標上の位置を決める */
-  int i;
+  int i, j;
   Point p[n];
-
+  
   srand(time(NULL));
 
   for(i=0; i<n; i++){
@@ -73,7 +73,10 @@ int main(void){
   printf("A = (%f,%f) とします\n", p[0].x, p[0].y);
   printf("B = (%f,%f) とします\n", p[n-1].x, p[n-1].y);
 
-  /** Aからの距離をそれぞれ求める */
+  /** 
+   * Aからの距離をそれぞれ求める
+   * 距離がr以下の店に重み１を足す
+   */
   double tmp = 0;
     
   for(i=1; i<n; i++){
@@ -81,11 +84,26 @@ int main(void){
       if(tmp <= r){
 	p[i].w = 1;
       }
+      printf("%d\n",p[i].w);
   }
+
+  printf("-----\n");
   
+  /**
+   *重みが１の点から、さらに距離を測り距離r以下の点を探す
+   */
+  double foo = 0;
   for(i=1; i<n; i++){
-    tmp = getDistance(p[0].x, p[0].y, p[i].x, p[i].y);
-    if(p[i].w == 1 && tmp <= r)
+    if(p[i].w == 1){
+      for(j=1; j<n; j++){
+	foo = getDistance(p[0].x, p[0].y, p[i].x, p[i].y);
+	if(foo <= r){
+	  p[j].w = p[i].w + 1;
+	}
+      }
+    }
+    printf("%d\n",p[i].w);
   }
+	
   
 }
