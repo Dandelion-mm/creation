@@ -12,21 +12,34 @@
 #include <time.h>
 #include <math.h>
 
-/** 型(Point)の定義 */
+/**
+ *型の定義
+ *点をPointとして定義する
+ */
 typedef struct{
   double x, y;
   int w;
 } Point;
 
-/** ２点間の距離を求める関数 */
+/**
+ * ２点間の距離を求める
+ * @param px １つ目の点のx座標
+ * @param py １つ目の点のy座標
+ * @param qx ２つ目の点のx座標
+ * @param qy ２つ目の点のy座標
+ * @return ２点間の距離
+ */
 double getDistance(double px, double py, double qx, double qy) {
   double distance = sqrt((qx - px) * (qx - px) + (qy - py) * (qy - py));
   return distance;
 }
 
+/**
+ * Mainの実行
+ */
 int main(void){
 
-  /** n個の整数の数を決める */
+  /** 整数の数nを決める */
   int n = 0;
 
   printf("整数の個数を入力してください\n");
@@ -55,8 +68,8 @@ int main(void){
     }
   }while (r <= 0 || 1 <= r);
   
-  /** A,Bを設定する  */
-  printf("A、B共に乱数で生成します\n");
+  /** A、Bを設定する  */
+  printf("ある２点（A、B）を発生させた乱数の中から決めます\n");
   printf("A = (%f,%f) とします\n", p[0].x, p[0].y);
   printf("B = (%f,%f) とします\n", p[n-1].x, p[n-1].y);
 
@@ -69,4 +82,10 @@ int main(void){
 	p[i].w = 1;
       }
   }
+  
+  for(i=1; i<n; i++){
+    tmp = getDistance(p[0].x, p[0].y, p[i].x, p[i].y);
+    if(p[i].w == 1 && tmp <= r)
+  }
+  
 }
