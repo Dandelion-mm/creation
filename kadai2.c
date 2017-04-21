@@ -54,7 +54,7 @@ int main(void){
   Point p[n];        //Point型の配列p
   
   srand(time(NULL));
-
+  
   for(i=0; i<n; i++){
     p[i].x = (double)rand() / RAND_MAX;
     p[i].y = (double)rand() / RAND_MAX;
@@ -72,10 +72,10 @@ int main(void){
     fprintf(file,"%f %f\n",p[i].x,p[i].y);
   }
   fclose(file);
-
+  
   /** rの距離の設定 */
   double r = 0;
-
+  
   do{
     printf("\nrを設定してください(0<r<1) : ");
     scanf("%lf", &r);
@@ -90,23 +90,20 @@ int main(void){
   printf("A = (%f,%f) とします\n", p[0].x, p[0].y);
   printf("B = (%f,%f) とします\n", p[dp].x, p[dp].y);
   printf("**************************************************\n\n");
-
+  
   /** 
    * Aからの距離をそれぞれ求める
    * 距離がr以下の点に重み１を足す
    */
   double dist = 0;    //２点間の距離を格納する変数
-    
+  
   for(i=1; i<n; i++){
     dist = getDistance(p[0].x, p[0].y, p[i].x, p[i].y);
     if(dist <= r){
       p[i].weight = 1;    //重みに１を足す
       p[i].pPoint = 0;    //前の点はスタートであるＡ(0)
-      //printf("%dの前は%d\n",i ,0);
-      }
+    }
   }
-
-  //printf("-----\n");
   
   /**
    * ダイクストラ法を用い、
@@ -114,7 +111,7 @@ int main(void){
    * 距離r以下の点を探していく
    * Bに重みがついた時点で、最短経路が確定する
    */
-
+  
   for(i=1; i<n; i++){
     for(j=1; j<n-1; j++){
       //重みが１の点から検索する
@@ -125,7 +122,6 @@ int main(void){
 	    if(p[k].weight == 0 || p[j].weight + 1 < p[k].weight){
 	      p[k].weight = p[j].weight + 1;
 	      p[k].pPoint = j;
-	      //printf("%dの前は%d\n", k , p[k].pPoint);
 	    }
 	  }
 	  if(p[dp].weight > 0){
@@ -141,27 +137,21 @@ int main(void){
       break;
     }
   }
-  /*
-  if(p[dp].weight != 0){
-    printf("************\n");
-    printf("点Bの重さは%d\n",p[dp].weight);*/
     
     /** 出力メソッド */
-    printf("************\n");
-    printf("\nAからBへの最短経路は\n");
+  if(p[dp].weight != 0){
+    printf("AからBへの最短経路は\n\n");
     printf("B(%f,%f)\n", p[dp].x ,p[dp].y);
     printf(" <-- ");
     
     j = p[dp].pPoint;    //目的地の一個前の点情報を代入
     for(i=0; i<p[dp].weight - 1; i++){
-        printf(" (%f,%f)\n", p[j].x ,p[j].y);
-        j = p[j].pPoint;
-        printf(" <-- ");
+      printf(" (%f,%f)\n", p[j].x ,p[j].y);
+      j = p[j].pPoint;
+      printf(" <-- ");
     }
     printf("A(%f,%f)\n\n", p[0].x ,p[0].y);
   }else{
     printf("AとBはつながりませんでした\n\n");
   }
-
-
 }
