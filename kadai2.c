@@ -2,7 +2,7 @@
  *
  * kadai2.c
  *
- * Created on : 2017/04/20
+ * Created on : 2017/04/21
  *     Author : murota
  *
  */
@@ -49,9 +49,9 @@ int main(void){
   scanf("%d",&n);
   
   /** 乱数を発生させ、座標上の位置を決める */
-  int i, j, k;     //for文用の変数
-  int dp = n-1;    //目的地
-  Point p[n];      //Point型の配列p
+  int i, j, k;            //for文用の変数
+  int dp = n-1;     //目的地
+  Point p[n];        //Point型の配列p
   
   srand(time(NULL));
 
@@ -61,6 +61,17 @@ int main(void){
     p[i].weight = 0;    //全地点の重さの初期値は0
     p[i].name = i;
   }
+  
+  /**
+   * 図を作成するために
+   * 乱数を別ファイルに保存しておく
+   */
+  FILE *file;
+  file = fopen("point.txt","w");
+  for(i=0; i<n; i++){
+    fprintf(file,"%f %f\n",p[i].x,p[i].y);
+  }
+  fclose(file);
 
   /** rの距離の設定 */
   double r = 0;
@@ -82,32 +93,34 @@ int main(void){
 
   /** 
    * Aからの距離をそれぞれ求める
-   * 距離がr以下の店に重み１を足す
+   * 距離がr以下の点に重み１を足す
    */
   double dist = 0;    //２点間の距離を格納する変数
     
   for(i=1; i<n; i++){
     dist = getDistance(p[0].x, p[0].y, p[i].x, p[i].y);
-      if(dist <= r){
-	p[i].weight = 1;    //重みに１を足す
-	p[i].pPoint = 0;    //前の点はスタートであるＡ(0)
-	//printf("%dの前は%d\n",i ,0);
+    if(dist <= r){
+      p[i].weight = 1;    //重みに１を足す
+      p[i].pPoint = 0;    //前の点はスタートであるＡ(0)
+      //printf("%dの前は%d\n",i ,0);
       }
   }
 
   //printf("-----\n");
   
   /**
-   *重みが１の点から、順々に距離を測り距離r以下の点を探す
+   * ダイクストラ法を用い、
+   * 重みが１の点から、他の点への距離を測り
+   * 距離r以下の点を探していく
+   * Bに重みがついた時点で、最短経路が確定する
    */
 
   for(i=1; i<n; i++){
     for(j=1; j<n-1; j++){
-      //重みが１の点から検索をする
+      //重みが１の点から検索する
       if(p[j].weight == i){
 	for(k=2; k<n; k++){
 	  dist = getDistance(p[j].x, p[j].y, p[k].x, p[k].y);
-	  //printf("%f\n",dist);
 	  if(dist <= r && dist != 0){
 	    if(p[k].weight == 0 || p[j].weight + 1 < p[k].weight){
 	      p[k].weight = p[j].weight + 1;
@@ -128,20 +141,27 @@ int main(void){
       break;
     }
   }
-
-  printf("-----\n");
-  printf("点Bの重さは%d\n",p[dp].weight);
-  
-  /** 出力 */
-  printf("-----\n");
-  printf("B(%f,%f) <-- ", p[dp].x ,p[dp].y);
-  
-  j = p[dp].pPoint;
-  for(i=0; i<p[dp].weight - 1; i++){
-    printf("(%f,%f)", p[j].x ,p[j].y);
-    j = p[j].pPoint;
+  /*
+  if(p[dp].weight != 0){
+    printf("************\n");
+    printf("点Bの重さは%d\n",p[dp].weight);*/
+    
+    /** 出力メソッド */
+    printf("************\n");
+    printf("\nAからBへの最短経路は\n");
+    printf("B(%f,%f)\n", p[dp].x ,p[dp].y);
     printf(" <-- ");
+    
+    j = p[dp].pPoint;    //目的地の一個前の点情報を代入
+    for(i=0; i<p[dp].weight - 1; i++){
+        printf(" (%f,%f)\n", p[j].x ,p[j].y);
+        j = p[j].pPoint;
+        printf(" <-- ");
+    }
+    printf("A(%f,%f)\n\n", p[0].x ,p[0].y);
+  }else{
+    printf("AとBはつながりませんでした\n\n");
   }
-  printf("A(%f,%f)\n", p[0].x ,p[0].y);
-  
+
+
 }
