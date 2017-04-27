@@ -165,23 +165,24 @@ int main(void){
 
   
   /** 点の移動を考える */
-  double dTime = 0.01;
+  double dTime = 100;
 
-  /** 目的地 */
-  p[sp].dx = (double)rand() / RAND_MAX;
-  p[sp].dy = (double)rand() / RAND_MAX;
+  for(i=0; i<n; i++){
+    /* 目的地を決める */
+    p[i].dx = (double)rand() / RAND_MAX;
+    p[i].dy = (double)rand() / RAND_MAX;
 
-  p[sp].speed = 0.01;
-
-  printf("Aの移動先(%f,%f)\n\n", p[sp].dx, p[sp].dy);
-
-  p[sp].cos = abs((p[sp].dx - p[sp].sx)) / getDistance(p[sp].sx, p[sp].sy, p[sp].dx, p[sp].dy);
-  p[sp].sin = abs((p[sp].dy - p[sp].sy)) / getDistance(p[sp].sx, p[sp].sy, p[sp].dx, p[sp].dy);
-  
-  p[sp].mx = p[sp].sx + p[sp].speed * p[sp].cos;
-  p[sp].my = p[sp].sy + p[sp].speed * p[sp].sin;
-
-  printf("%f,%f\n\n", p[sp].mx, p[sp].my);
+    /* 速度を決める */
+    p[i].speed = 0.01;
+    
+    p[i].cos = (p[i].dx - p[i].sx) / getDistance(p[i].sx, p[i].sy, p[i].dx, p[i].dy);
+    p[i].sin = (p[i].dy - p[i].sy) / getDistance(p[i].sx, p[i].sy, p[i].dx, p[i].dy);
+    
+    p[i].mx = p[i].sx + p[i].speed * p[i].cos;
+    p[i].my = p[i].sy + p[i].speed * p[i].sin;
+    
+    printf("%dの通過点は(%f,%f)\n\n", i , p[i].mx, p[i].my);
+  }
   
   
   
