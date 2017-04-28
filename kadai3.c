@@ -53,11 +53,24 @@ double getDistance(double px, double py, double qx, double qy) {
  */
 void PrintAandB(double ax, double ay, double bx, double by){
   printf("\n**************************************************\n");
-  printf("ある２点（Ａ、Ｂ）を発生させた乱数の中から決めます\n");
+  printf("ある2点(A,B)を発生させた乱数の中から決めます\n");
   printf("A = (%f,%f) とします\n", ax, ay);
   printf("B = (%f,%f) とします\n", bx, by);
   printf("**************************************************\n\n");
 }
+
+/**
+ * RandomWayPointを実行する関数
+ * @param px 移動前のx座標
+ * @param py 移動前のy座標 
+ */
+/*void RandomWayPoint(struct p){
+  
+
+  }*/
+
+
+
 
 /**
  * Main関数
@@ -165,24 +178,38 @@ int main(void){
 
   
   /** 点の移動を考える */
-  double dTime = 100;
-
+  double dTime = 0.01;    //微小時間Δt
+  
   for(i=0; i<n; i++){
-    /* 目的地を決める */
+    /** 目的地を決める */
     p[i].dx = (double)rand() / RAND_MAX;
     p[i].dy = (double)rand() / RAND_MAX;
-
-    /* 速度を決める */
-    p[i].speed = 0.01;
     
+    /** 速度を決める */
+    p[i].speed = (double)rand() / RAND_MAX;
+    
+  /** sin,cosを求める */
     p[i].cos = (p[i].dx - p[i].sx) / getDistance(p[i].sx, p[i].sy, p[i].dx, p[i].dy);
     p[i].sin = (p[i].dy - p[i].sy) / getDistance(p[i].sx, p[i].sy, p[i].dx, p[i].dy);
-    
-    p[i].mx = p[i].sx + p[i].speed * p[i].cos;
-    p[i].my = p[i].sy + p[i].speed * p[i].sin;
-    
-    printf("%dの通過点は(%f,%f)\n\n", i , p[i].mx, p[i].my);
   }
+  
+  for(i=0; i<n; i++){
+    /** 移動中の点を出す */
+    p[i].mx = p[i].sx + p[i].speed * p[i].cos * dTime;
+    p[i].my = p[i].sy + p[i].speed * p[i].sin * dTime;
+    
+    //printf("%dの通過点は(%f,%f)\n", i , p[i].mx, p[i].my);
+
+    /** 到達判定 */
+    if(p[i].mx >= p[i].dx){
+      p[i].sx = p[i].dx;
+      p[i].sy = p[i].dx;
+    }
+  }
+
+  
+
+  
   
   
   
