@@ -12,6 +12,8 @@
 #include <time.h>
 #include <math.h>
 
+int n = 0;
+
 /**
  *型の定義
  *点をPointとして定義する
@@ -64,10 +66,22 @@ void PrintAandB(double ax, double ay, double bx, double by){
  * @param px 移動前のx座標
  * @param py 移動前のy座標 
  */
-/*void RandomWayPoint(struct p){
-  
-
-  }*/
+void RandomWayPoint(Point p[]){
+  int i;
+  for(i=0; i<n; i++){
+    /** 目的地を決める */
+    p[i].dx = (double)rand() / RAND_MAX;
+    p[i].dy = (double)rand() / RAND_MAX;
+    printf("%dの目的地 --> (%f,%f)\n", i, p[i].dx, p[i].dy);
+    
+    /** 速度を決める */
+    p[i].speed = (double)rand() / RAND_MAX;
+    
+    /** sin,cosを求める */
+    p[i].cos = (p[i].dx - p[i].sx) / getDistance(p[i].sx, p[i].sy, p[i].dx, p[i].dy);
+    p[i].sin = (p[i].dy - p[i].sy) / getDistance(p[i].sx, p[i].sy, p[i].dx, p[i].dy);
+  }
+}
 
 
 
@@ -76,9 +90,6 @@ void PrintAandB(double ax, double ay, double bx, double by){
  * Main関数
  */
 int main(void){
-  
-  /** 整数の数nを決める */
-  int n = 0;
   
   printf("\n整数の個数を入力してください : ");
   scanf("%d",&n);
@@ -180,32 +191,22 @@ int main(void){
   /** 点の移動を考える */
   double dTime = 0.01;    //微小時間Δt
   
-  for(i=0; i<n; i++){
-    /** 目的地を決める */
-    p[i].dx = (double)rand() / RAND_MAX;
-    p[i].dy = (double)rand() / RAND_MAX;
-    
-    /** 速度を決める */
-    p[i].speed = (double)rand() / RAND_MAX;
-    
-  /** sin,cosを求める */
-    p[i].cos = (p[i].dx - p[i].sx) / getDistance(p[i].sx, p[i].sy, p[i].dx, p[i].dy);
-    p[i].sin = (p[i].dy - p[i].sy) / getDistance(p[i].sx, p[i].sy, p[i].dx, p[i].dy);
-  }
-  
+  RandomWayPoint(p);
+
   for(i=0; i<n; i++){
     /** 移動中の点を出す */
     p[i].mx = p[i].sx + p[i].speed * p[i].cos * dTime;
     p[i].my = p[i].sy + p[i].speed * p[i].sin * dTime;
-    
-    //printf("%dの通過点は(%f,%f)\n", i , p[i].mx, p[i].my);
 
     /** 到達判定 */
     if(p[i].mx >= p[i].dx){
       p[i].sx = p[i].dx;
       p[i].sy = p[i].dx;
+      RandomWayPoint(p); 
     }
+    
   }
+
 
   
 
