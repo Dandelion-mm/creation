@@ -191,20 +191,55 @@ int main(void){
   
   /** 点の移動を考える */
   double dTime = 0.01;    //微小時間Δt
-  
-  RandomWayPoint(p);
+  double aTime = 0;       //dTimeより先に到着した場合の、dTimeまでの残りの時間
 
+  /** 最初のランダムウェイポイント */
   for(i=0; i<n; i++){
-    /** 移動中の点を出す */
-    p[i].mx = p[i].sx + p[i].speed * p[i].cos * dTime;
-    p[i].my = p[i].sy + p[i].speed * p[i].sin * dTime;
+    /** 目的地を決める */
+    p[i].dx = (double)rand() / RAND_MAX;
+    p[i].dy = (double)rand() / RAND_MAX;
+    printf("%dの目的地 --> (%f,%f)\n", i, p[i].dx, p[i].dy);
+    
+    /** 速度を決める */
+    p[i].speed = (double)rand() / RAND_MAX;
+    
+    /** sin,cosを求める */
+    p[i].cos = (p[i].dx - p[i].sx) / getDistance(p[i].sx, p[i].sy, p[i].dx, p[i].dy);
+    p[i].sin = (p[i].dy - p[i].sy) / getDistance(p[i].sx, p[i].sy, p[i].dx, p[i].dy);
+  }
+  
 
-    /** 到達判定 */
-    if(p[i].mx >= p[i].dx){
-      p[i].sx = p[i].dx;
-      p[i].sy = p[i].dx;
-      RandomWayPoint(p); 
+  for(i=0; i<100; i + dTime){
+    for(j=0; j<n; j++){
+      /** 移動中の点を出す */
+      p[j].mx = p[j].sx + p[j].speed * p[j].cos * dTime;
+      p[j].my = p[j].sy + p[j].speed * p[j].sin * dTime;
+      
+      /** 到達判定 */
+      if(p[j].mx >= p[j].dx){
+	p[j].sx = p[j].dx;
+	p[j].sy = p[j].dx;
+
+	aTime = dTime - getDistance(p[j].sx, p[j].sy, p[j].dx, p[j].dy) / p[j].speed;
+	
+	/** 新たな目的地を決める */
+	p[j].dx = (double)rand() / RAND_MAX;
+	p[j].dy = (double)rand() / RAND_MAX;
+	printf("%dの目的地 --> (%f,%f)\n", j, p[j].dx, p[j].dy);
+	
+	/** 新たな速度を決める */
+	p[j].speed = (double)rand() / RAND_MAX;
+	
+	/** sin,cosを求める */
+	p[j].cos = (p[j].dx - p[j].sx) / getDistance(p[j].sx, p[j].sy, p[j].dx, p[j].dy);
+	p[j].sin = (p[j].dy - p[j].sy) / getDistance(p[j].sx, p[j].sy, p[j].dx, p[j].dy);
+
+	p[j].mx = p[j].sx + p[j].speed * p[j].cos * aTime;
+	p[j].my = p[j].sy + p[j].speed * p[j].sin * aTime;
+      }
     }
+    /** ダイクストラ法を用い、最短経路がどのようになっているかを判断する */
+    
     
   }
 
