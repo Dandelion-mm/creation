@@ -12,7 +12,8 @@
 #include <time.h>
 #include <math.h>
 
-int n = 0;
+/** グローバル変数 */
+int n = 0;    //点の個数
 
 /**
  *型の定義
