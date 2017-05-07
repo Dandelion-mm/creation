@@ -9,6 +9,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <time.h>
 #include <math.h>
 
@@ -216,7 +217,7 @@ int main(void){
 	            p[j].speed = (double)rand() / RAND_MAX;
 
 	            /** 2点間の距離を出す */
-                dist = getDistance(p[i].sx, p[i].sy, p[i].dx, p[i].dy);
+                dist = getDistance(p[j].sx, p[j].sy, p[j].dx, p[j].dy);
 
 	            /** sin,cosを求める */
 	            p[j].cos = (p[j].dx - p[j].sx) / dist;
