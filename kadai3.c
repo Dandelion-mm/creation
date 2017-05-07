@@ -158,10 +158,6 @@ int main(void){
     j = p[j].pPoint;
   }
 
-  /*for(i=0; i<p[dp].weight+1; i++){
-    printf("%d\n",pRoute[i]);
-    }*/
-
   /** 出力メソッド */
   if(p[dp].weight != 0){
     printf("初めのAからBへの最短経路は\n\n");
@@ -235,7 +231,6 @@ int main(void){
 	    p[i].cos = (p[i].dx - p[i].sx) / dist;
 	    p[i].sin = (p[i].dy - p[i].sy) / dist;
 
-	    printf("%dの移動中の点 --> (%f,%f)\n", i, p[i].mx, p[i].my);
       }
       p[i].sx = p[i].mx;
       p[i].sy = p[i].my;
@@ -244,9 +239,9 @@ int main(void){
     /** ダイクストラ法を用い、最短経路が変更したかどうかを判断する */
 
 
+
   }
 
-  printf("end\n");
 
 
 }
