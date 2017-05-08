@@ -174,7 +174,7 @@ int main(void){
   /** 点の移動を考える */
   double dTime = 0.01;    //微小時間Δt
   double aTime = 0.0;     //Additional Time
-  double Time = 10;       //何秒間続けるか
+  double Time = 100;       //何秒間続けるか
   double t = 0.0;         //経過時間
   double rdist = 0.0;
   int num1, num2;
@@ -195,14 +195,16 @@ int main(void){
     /** sin,cosを求める */
     p[i].cos = (p[i].dx - p[i].sx) / dist;
     p[i].sin = (p[i].dy - p[i].sy) / dist;
+
+    p[i].mx = p[i].sx;
+    p[i].my = p[i].sy;
   }
   
   for(t=0.0; t<Time; t += dTime){
-    //printf("%.2f秒目\n",t);
     for(i=0; i<n; i++){
       /** 移動中の点を出す */
-      p[i].mx = p[i].sx + p[i].speed * p[i].cos * dTime;
-      p[i].my = p[i].sy + p[i].speed * p[i].sin * dTime;
+      p[i].mx += p[i].speed * p[i].cos * dTime;
+      p[i].my += p[i].speed * p[i].sin * dTime;
       
       /** 到達判定 */
       if(fabs(p[i].dx - p[i].sx) <= fabs(p[i].mx - p[i].sx)){
@@ -217,7 +219,6 @@ int main(void){
 	/** 新たな目的地を決める */
 	p[i].dx = (double)rand() / RAND_MAX;
 	p[i].dy = (double)rand() / RAND_MAX;
-	//printf("%dの新たな目的地 --> (%f,%f)\n",i ,p[i].dx, p[i].dy);
 	
 	/** 新たな速度を決める */
 	p[i].speed = (double)rand() / RAND_MAX;
@@ -232,11 +233,7 @@ int main(void){
 	/** 移動中の点を出す */
 	p[i].mx = p[i].sx + p[i].speed * p[i].cos * aTime;
 	p[i].my = p[i].sy + p[i].speed * p[i].sin * aTime;
-	
       }
-      p[i].sx = p[i].mx;
-      p[i].sy = p[i].my;
-      //printf("%dの移動点 --> (%f,%f)\n", i, p[i].mx, p[i].my);
     }
     
     /** 既存の最短経路を調べ、最短経路が使えるかどうかを判断する */
@@ -244,7 +241,7 @@ int main(void){
     num1 = p[dp].name;
     for(a=0; a<p[dp].weight; a++){
       num2 = p[num1].pPoint;
-      rdist = getDistance(p[num1].sx, p[num1].sy, p[num2].sx, p[num2].sy);
+      rdist = getDistance(p[num1].mx, p[num1].my, p[num2].mx, p[num2].my);
 
       /** 既存の最短経路が使えなくなった場合 */
       
@@ -254,7 +251,7 @@ int main(void){
 	  p[i].pPoint = 0;
 	}
 	for(i=1; i<n; i++){
-	  dist = getDistance(p[0].sx, p[0].sy, p[i].sx, p[i].sy);
+	  dist = getDistance(p[0].mx, p[0].my, p[i].mx, p[i].my);
 	  if(dist <= r){
 	    p[i].weight = 1;    //重みに１を足す
 	    p[i].pPoint = 0;    //前の点はスタートである
@@ -266,7 +263,7 @@ int main(void){
 	    //重みが１の点から検索する
 	    if(p[j].weight == i){
 	      for(k=2; k<n; k++){
-		dist = getDistance(p[j].sx, p[j].sy, p[k].sx, p[k].sy);
+		dist = getDistance(p[j].mx, p[j].my, p[k].mx, p[k].my);
 		if(dist <= r && dist != 0){
 		  if(p[k].weight == 0 || p[j].weight + 1 < p[k].weight){
 		    p[k].weight = p[j].weight + 1;
@@ -289,28 +286,24 @@ int main(void){
 	
 	num = p[dp].pPoint;    //目的地の一個前の点情報を代入
 	for(i=0; i<p[dp].weight - 1; i++){
-	  sRoute[i][0] = p[num].sx;
-	  sRoute[i][1] = p[num].sy;
+	  sRoute[i][0] = p[num].mx;
+	  sRoute[i][1] = p[num].my;
 	  num = p[num].pPoint;
 	}
 	
 	printf("\n最短経路は%.2f秒の時更新されます\n",t);
 	printf("新たなAからBへの最短経路は\n\n");
-	printf("B(%f,%f)\n", p[dp].sx, p[dp].sy);
+	printf("B(%f,%f)\n", p[dp].mx, p[dp].my);
 	printf(" <-- ");
 	
 	for(i=0; i<p[dp].weight - 1; i++){
 	  printf(" (%f,%f)\n", sRoute[i][0], sRoute[i][1]);
 	  printf(" <-- ");
 	}
-	printf("A(%f,%f)\n\n", p[sp].sx ,p[sp].sy);
-	break;
+	printf("A(%f,%f)\n\n", p[sp].mx ,p[sp].my);
       }
       num1 = num2;
+      break;
     }
-      
-
-
-    
   }
 }
